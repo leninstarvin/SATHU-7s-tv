@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="ta">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sathu TV — Admin</title>
+<style>
+  body{font-family:system-ui,Arial;margin:20px}
+  .card{max-width:600px;margin:0 auto}
+  input{width:100%;padding:10px;margin:8px 0;font-size:16px}
+  button{padding:10px 16px;font-size:16px}
+  p.small{color:#555;font-size:14px}
+</style>
+</head>
+<body>
+<div class="card">
+  <h2>சாது TV — Admin</h2>
+  <p class="small">YouTube வீடியோ லிங்க் போட்டு "Save" அழுத்தவும். (எடுத்துக்காட்டு: https://youtu.be/VIDEOID அல்லது https://www.youtube.com/watch?v=VIDEOID)</p>
+  <input id="url" placeholder="YouTube link அல்லது video id">
+  <div>
+    <button id="save">Save</button>
+    <button id="clear">Clear</button>
+  </div>
+  <p id="msg" class="small"></p>
+</div>
+
+<script>
+const inp = document.getElementById('url'), msg = document.getElementById('msg');
+function extractId(u){
+  if(!u) return '';
+  // common patterns
+  const m = u.match(/(?:v=|\/youtu\.be\/|\/embed\/|\/v\/)([A-Za-z0-9_-]{11})/);
+  if(m) return m[1];
+  // if user pasted only id
+  if(/^[A-Za-z0-9_-]{11}$/.test(u)) return u;
+  return '';
+}
+document.getElementById('save').onclick = ()=>{
+  const id = extractId(inp.value.trim());
+  if(!id){ msg.textContent='சரியான YouTube link அல்லது video id இல்லை.'; return; }
+  localStorage.setItem('sathu_video_id', id);
+  msg.textContent = 'Saved! Video ID: ' + id;
+}
+document.getElementById('clear').onclick = ()=>{
+  localStorage.removeItem('sathu_video_id');
+  msg.textContent = 'Cleared.';
+  inp.value = '';
+}
+// prefill if exists
+const existing = localStorage.getItem('sathu_video_id');
+if(existing) { inp.value = existing; msg.textContent = 'Current saved video id: ' + existing; }
+</script>
+</body>
+</html>

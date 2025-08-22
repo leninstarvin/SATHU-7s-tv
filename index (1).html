@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="ta">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Sathu TV</title>
+<style>
+  html,body{height:100%;margin:0;font-family:system-ui,Arial;background:#000;color:#fff}
+  .wrap{display:flex;flex-direction:column;height:100%}
+  header{padding:.8rem;text-align:center;background:#111}
+  main{flex:1;display:flex;align-items:center;justify-content:center;padding:12px}
+  iframe{width:100%;max-width:900px;height:56.25vw;max-height:506px;border:0;border-radius:8px;background:#000}
+  .note{font-size:14px;color:#bbb;padding:8px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header><h1 style="margin:0;font-size:20px">Sathu TV</h1></header>
+  <main id="playerArea">
+    <div class="note">Loading video...</div>
+  </main>
+  <div class="note">If no video, contact admin.</div>
+</div>
+
+<script>
+function loadPlayer(){
+  const id = localStorage.getItem('sathu_video_id');
+  const area = document.getElementById('playerArea');
+  if(!id){
+    area.innerHTML = '<div style="text-align:center;color:#ccc">வீடியோ கிடைக்கவில்லை. அணுகு: admin.</div>';
+    return;
+  }
+  // embed YouTube (no autoplay to be friendly on mobiles)
+  const src = 'https://www.youtube.com/embed/' + id + '?rel=0';
+  area.innerHTML = '<iframe src="'+src+'" allow="accelerometer; encrypted-media; picture-in-picture" allowfullscreen></iframe>';
+}
+// initial load
+loadPlayer();
+// optionally poll for changes (admin may update while users open page)
+setInterval(loadPlayer, 3000);
+</script>
+</body>
+</html>
